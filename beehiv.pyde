@@ -24,12 +24,14 @@ def setup():
     pace_slider = Slider(0, go_button.y+go_button._height, width/5, height/20, "pace")
     ticks = Counter(width/2, 0, "Ticks: ")
     number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ")
-                             
+    
                              
 def draw():
     global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider
     background(0,0,0)
     ticks.render()
+    fill(200,200,10)
+    rect(width/2-20, height/2-20, 40, 40)
     if _setup:
         for bee in bees:
             bee.render()
@@ -44,9 +46,11 @@ def draw():
     if go:
         ticks.value += 1
         for bee in bees:
-            print("ASDDSA")
             bee.update()
-    
+            if bee.activity == 2:
+                for flower in flowers:
+                    if bee.flower_collision(flower):
+                        break
     delay(100 - pace_slider.value)
     
     
@@ -60,6 +64,7 @@ def mouseClicked():
         if go:
             go = False
         else:
+            print(True)
             go = True
     
     if number_of_bees.overEvent():
@@ -68,18 +73,13 @@ def mouseClicked():
         number_of_bees.selected = False
         
 def keyPressed():
-    print("PRESSED")
     if number_of_bees.selected:
         if key == BACKSPACE:
-            print(key)
             if number_of_bees.value[:-1] == "":
-                print(number_of_bees)
                 number_of_bees.value = 0
-                print(number_of_bees.value)
             else:
                 number_of_bees.value = number_of_bees.value[:-1]
-        else:
-            print(type(key), str(key))
+        elif str(key) in [str(i) for i in range(10)]:
             if number_of_bees.value == 0 or number_of_bees.value[0] == "0":
                 number_of_bees.value = str(key)
             else:
@@ -105,6 +105,7 @@ def setup_trigger():
     flowers = [
         Flower(
             x=not_middle(width),
-            y=not_middle(height)
+            y=not_middle(height),
+            pollen=random(15,100)
         ) for i in range(number_of_flowers)
     ]
