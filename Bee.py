@@ -57,7 +57,7 @@ class Bee(object):
             self.angle += uniform(-PI/6, PI/6)
     
     def returning(self):
-        # print("RETURNING")
+        print("RETURNING")
         self.angle = atan2(self.y-height/2, self.x-width/2)
         self.x -= uniform(1,6) * cos(self.angle)
         self.y -= uniform(1,6) * sin(self.angle)
@@ -80,13 +80,11 @@ class Bee(object):
     
     def harvesting(self, flower):
         print("HARVESTING")
-        print(flower.max_per_bee >= self.pollen, self.pollen)
-        while flower.max_per_bee >= self.pollen and flower.pollen > 0:
-            print(self.pollen)
+        print(flower.max_per_bee >= self.pollen, flower.pollen > 0)
+        pollen_amount = True
+        while flower.max_per_bee >= self.pollen and flower.pollen > 0 and pollen_amount != 0:
             pollen_amount = self.intake if self.intake + self.pollen <= flower.max_per_bee else flower.max_per_bee - self.pollen
             print(pollen_amount)
-            print(flower.max_per_bee <= self.pollen)
-
             self.pollen += pollen_amount
             flower.pollen -= pollen_amount
         self.flower = None

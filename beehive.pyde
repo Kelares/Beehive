@@ -17,7 +17,7 @@ def not_middle(direction):
 
 def setup():
     global ticks, bees, flowers, setup_button, go_button, number_of_bees, pace_slider
-    size(800, 800)
+    size(1200, 1200)
     setup_button = Button(0, 0, width/10,50, "setup")
     go_button = Button(width/10, 0, width/10,50, "go")
     
