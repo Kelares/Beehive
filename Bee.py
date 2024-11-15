@@ -1,7 +1,7 @@
 from random import choice, uniform
 
 class Bee(object):
-    def __init__(self, x, y, angle):
+    def __init__(self, x, y, angle, hive):
         self.x = x
         self.y = y
         self.angle = angle
@@ -13,9 +13,9 @@ class Bee(object):
         self.searching = 0
         self.activity = Activity.IDLE
         self.pollen = 0
-        self.intake = 5
         self.flower = None
-        self.at_the_flower = False
+        self.hive = hive
+        
         
     def render(self):
         pushMatrix()
@@ -57,12 +57,14 @@ class Bee(object):
             self.angle += uniform(-PI/6, PI/6)
     
     def returning(self):
-        print("RETURNING")
-        self.angle = atan2(self.y-height/2, self.x-width/2)
+        # print("RETURNING")
+        self.angle = atan2(self.y-self.hive.middle["y"], self.x-self.hive.middle["x"])
         self.x -= uniform(1,6) * cos(self.angle)
         self.y -= uniform(1,6) * sin(self.angle)
-        if self.x - width/2 <= 3 and self.y - height/2 <= 3:
+        if abs(self.x - self.hive.middle["x"]) <= self.hive._width/2 and abs(self.y - self.hive.middle["y"]) <= self.hive._height/2:
             self.searching = 0
+            self.hive.pollen += self.pollen
+            self.pollen = 0
             self.activity = Activity.IDLE
             
 
@@ -80,15 +82,22 @@ class Bee(object):
     
     def harvesting(self, flower):
         print("HARVESTING")
-        print(flower.max_per_bee >= self.pollen, flower.pollen > 0)
-        pollen_amount = True
-        while flower.max_per_bee >= self.pollen and flower.pollen > 0 and pollen_amount != 0:
-            pollen_amount = self.intake if self.intake + self.pollen <= flower.max_per_bee else flower.max_per_bee - self.pollen
-            print(pollen_amount)
+        pollen_amount = 1
+        if flower.pollen > 0 and self.pollen <= flower.max_per_bee:
+            if self.flower.pollen - pollen_amount <= 0:
+                pollen_amount = self.flower.pollen
+            
+            if pollen_amount == 0.0:
+                self.flower = None
+                self.activity = Activity.RETURNING
+                return None
+            
             self.pollen += pollen_amount
             flower.pollen -= pollen_amount
-        self.flower = None
-        self.activity = Activity.RETURNING
+        else:
+            self.flower = None
+            self.activity = Activity.RETURNING
+            
             
             
         

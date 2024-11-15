@@ -5,6 +5,7 @@ from slider import Slider
 from button import Button
 from counter import Counter
 from textBox import TextBox
+from Hive import Hive
 
 go = False
 _setup = False
@@ -16,8 +17,10 @@ def not_middle(direction):
     return temp
 
 def setup():
-    global ticks, bees, flowers, setup_button, go_button, number_of_bees, pace_slider
-    size(1200, 1200)
+    global ticks, bees, flowers, setup_button, go_button, number_of_bees, pace_slider, hive
+    size(800, 800)
+    frameRate(300)
+    hive = Hive(width/2-20, height/2-20, 40, 40)
     setup_button = Button(0, 0, width/10,50, "setup")
     go_button = Button(width/10, 0, width/10,50, "go")
     
@@ -27,11 +30,10 @@ def setup():
     
                              
 def draw():
-    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider
+    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive
     background(0,0,0)
     ticks.render()
-    fill(200,200,10)
-    rect(width/2-20, height/2-20, 40, 40)
+    hive.render()
     if _setup:
         for bee in bees:
             bee.render()
@@ -87,7 +89,7 @@ def keyPressed():
         
  
 def setup_trigger():
-    global bees, flowers, number_of_bees
+    global bees, flowers, number_of_bees, hive
     human_width = 20
     human_height = 20
     print(number_of_bees.value)
@@ -95,9 +97,10 @@ def setup_trigger():
     spread = 40 
     bees = [
         Bee(
-            x=width/2 + random(-spread, spread),
-            y=height/2 + random(-spread, spread),
-            angle = random(0,2*PI)
+            x = width/2 + random(-spread, spread),
+            y = height/2 + random(-spread, spread),
+            angle = random(0,2*PI),
+            hive = hive
         ) for i in range(int(number_of_bees.value))
     ]
     
@@ -106,6 +109,6 @@ def setup_trigger():
         Flower(
             x=not_middle(width),
             y=not_middle(height),
-            pollen=random(15,100)
+            pollen=randint(15,100)
         ) for i in range(number_of_flowers)
     ]
