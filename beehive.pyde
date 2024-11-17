@@ -6,7 +6,7 @@ from button import Button
 from counter import Counter
 from textBox import TextBox
 from Hive import Hive
-import plotly.graph_objects as graph
+from graph import Graph
 
 go = False
 _setup = False
@@ -18,8 +18,8 @@ def not_middle(direction):
     return temp
 
 def setup():
-    global ticks, bees, flowers, setup_button, go_button, number_of_bees, number_of_flowers, pace_slider, hive, fig
-    size(800, 800)
+    global ticks, bees, flowers, setup_button, go_button, number_of_bees, number_of_flowers, pace_slider, hive, graph, n_bees_flowers
+    size(1200, 1200)
     smooth()
     frameRate(60)
     stroke(255)
@@ -31,17 +31,12 @@ def setup():
     ticks = Counter(width/2, 0, "Ticks: ")
     number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="150")
     number_of_flowers = TextBox(0, number_of_bees.y+number_of_bees._height, width/5, 50, "number of flowers: ", value="20")
-    n_bees_flowers = {int(ticks.value): {"n_bees" : len(bees), "n_flowers": len(flowers)}}
-    fig = graph.Figure()
-    fig.add_trace(
-        graph.Scatter(
-            x=n_bees_flowers.keys().sorted(),
-            y=[n_bees_flowers[tick][n_bees] for tick in n_bees_flowers]
-        )
-    )
+    n_bees_flowers = {}
+    graph = Graph(width-10, height-10, 600, 300, PI)
+
                              
 def draw():
-    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, fig
+    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, graph, n_bees_flowers
     background(0)
     ticks.render()
     hive.render()
@@ -50,13 +45,18 @@ def draw():
             bee.render()
         for flower in flowers.values():
             flower.render()
+            
+        n_bees_flowers[int(ticks.value)] = {"n_bees" : len(bees.keys()), "n_flowers": len(flowers.keys())}
+        n_bees = [(tick, n_bees_flowers[tick]["n_bees"]) for tick in n_bees_flowers]
+        graph.render([n_bees])
+    
     pace_slider.render()
     pace_slider.update()
     setup_button.render()
     go_button.render()
     number_of_bees.render()
     number_of_flowers.render()
-    fig.show()
+
 
     if go:
         ticks.value += 1
@@ -69,7 +69,6 @@ def draw():
 
                 obs_keys = observed.keys()
                 if len(obs_keys):
-                    print("WTF")
                     goal = max(obs_keys)
                     flower = observed[goal]
                     bee.activity = Activity.HARVESTING

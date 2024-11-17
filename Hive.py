@@ -10,7 +10,7 @@ class Hive(object):
         self.pollen = 0
         self.middle = {"x": x + self._width/2, "y": y + self._height/2}
         self.pollen_counter = Counter(width, 0, caption="Pollen: ", align=(RIGHT, TOP))
-        self.spawn_threshold = 30000
+        self.spawn_threshold = 10000
         
     def render(self):
         fill(200,200,10)
