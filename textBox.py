@@ -1,11 +1,11 @@
 class TextBox(object):
-    def __init__(self, x, y, _width, _height, caption):
+    def __init__(self, x, y, _width, _height, caption, value=0):
         self.x = x
         self.y = y
         self._width = _width
         self._height = _height
         self.caption = caption
-        self.value = 0
+        self.value = value
         
     def render(self):
         fill(255,255,255,180)
