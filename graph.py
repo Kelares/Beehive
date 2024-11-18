@@ -33,10 +33,9 @@ class Graph(object):
         line(0, self._height+arrow_length, self._width/16, self._height+arrow_length/4) 
         line(0, self._height+arrow_length, -self._width/16, self._height+arrow_length/4) 
 
-        stroke(255,0,0)
+        for _color, label, trace in traces:
+            prev = ()
 
-        prev = ()
-        for trace in traces:
             if len(trace) >= self.max_data:
                 for i, data_point in enumerate(trace):
                     if i % 2 == 0:
@@ -49,8 +48,8 @@ class Graph(object):
             max_y = max(trace, key=sec_ele)[1] + self._height/20
             if self.max_y < max_y:
                 self.max_y = max_y
-                
-                
+            
+            stroke(*_color)         
             if len(trace) > 1:
                 for i, data_point in enumerate(trace):
                     trace[i] = (self._width * data_point[0] / self.max_x, self._height * (data_point[1] / self.max_y))
@@ -61,7 +60,8 @@ class Graph(object):
                         prev = data_point
                     else:
                         prev = data_point
-                        
+
+        stroke(255)
         ticks_x = create_list_with_n_elements(self.max_x, 10)
         ticks_y = create_list_with_n_elements(self.max_y, 10)
         max_tick_y = max(ticks_y)
@@ -76,6 +76,13 @@ class Graph(object):
         for i, tick_y in enumerate(ticks_y):
             text(str(int(tick_y)), 0, -axis_y_ticks[i])
             line(-self._width/30, -axis_y_ticks[i], self._width/30, -axis_y_ticks[i])
+            
+        for i, trace in enumerate(traces):
+            _color, label, data = trace
+            fill(*_color)
+            textSize(20)
+            textAlign(LEFT, TOP)
+            text(label, -self._width+ self._width/50, -self._height + self._height*(i)/10 + self._height/50)#self._width, self._height - self._height/10)
         stroke(255)
 
         popMatrix()

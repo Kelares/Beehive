@@ -136,7 +136,7 @@ class Bee(object):
             self.spawn_flower_check = True
             
     def flower_collision(self, flower):
-        if sqrt((self.x - flower.x)**2 + (self.y - flower.y)**2) <= 15:
+        if sqrt((self.x - flower.x)**2 + (self.y - flower.y)**2) <= flower.collision_threshold:
             print("FOUND")
             self.activity = Activity.HARVESTING
             self.flower = flower

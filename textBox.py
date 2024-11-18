@@ -1,18 +1,20 @@
 class TextBox(object):
-    def __init__(self, x, y, _width, _height, caption, value=0):
+    def __init__(self, x, y, _width, _height, caption, value=0, box_color=color(187, 207, 141, 150), text_color=color(100,255,255,255)):
         self.x = x
         self.y = y
         self._width = _width
         self._height = _height
         self.caption = caption
         self.value = value
+        self.box_color = box_color
+        self.text_color = text_color
         
     def render(self):
-        fill(255,255,255,180)
+        fill(self.box_color)
         rect(self.x, self.y, self._width, self._height)
         textSize(15)
         textAlign(LEFT, CENTER);
-        fill(100,160,255,255)
+        fill(self.text_color)
         text(self.caption, self.x, self.y+self._height/2)
         textSize(40)
         textAlign(RIGHT, CENTER);

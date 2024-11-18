@@ -5,7 +5,8 @@ class Bar(object):
         self._width = _width - slider_width
         self._height = _height
         self.slider_width = slider_width
-    
+        self.box_color=color(187, 207, 141, 150)
+        
     def render(self):
-        fill(255,10,10,200)
+        fill(self.box_color)
         rect(self.x, self.y, self._width + self.slider_width, self._height)
