@@ -37,7 +37,7 @@ def setup():
     inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="150")
     inp_number_of_flowers = TextBox(0, inp_number_of_bees.y+inp_number_of_bees._height, width/5, 50, "number of flowers: ", value="35")
     
-    graph = Graph(width-30, height-30, 600, 300, PI)
+    graph = Graph(width-30, height-30, width/2, height/4, PI)
 
     stats = 1
     number_of_bees = Counter(width, 0 + height/50 * stats, "Number of bees: {}", align=(RIGHT, TOP))
@@ -85,17 +85,16 @@ def draw():
     background(0)
 
     if _setup:
-        # for flower in flowers.values():
-        #     flower.render()
-        # for bee in bees.values():
-        #     bee.render()
+        for flower in flowers.values():
+            flower.render()
+        for bee in bees.values():
+            bee.render()
         
-        # if len(n_bees_flowers) >= Graph.max_data:
-        #     print(len(n_bees_flowers))
-        #     for i, tick in enumerate(n_bees_flowers):
-        #         if i % 2 == 0:
-        #             del(n_bees_flowers[tick])
-                    # print(n_bees_flowers, "END")
+        if len(n_bees_flowers) >= Graph.max_data:
+            print(len(n_bees_flowers))
+            for i, tick in enumerate(n_bees_flowers):
+                if i % 2 == 0:
+                    del(n_bees_flowers[tick])
                     
         n_bees_flowers[int(ticks.value)] = {"n_bees" : len(bees.keys()), "n_flowers": len(flowers.keys())}
         n_bees = []
