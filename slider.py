@@ -1,4 +1,5 @@
 from __future__ import division
+from text_stroke import text_with_border
 
 from Bar import Bar
 class Slider(object):
@@ -20,7 +21,7 @@ class Slider(object):
         textSize(20)
         textAlign(CENTER, CENTER);
         fill(100,255,255,255)
-        text(self.caption + ": " + str(self.value), self.bar.x+self.bar._width/2, self.bar.y + self.bar._height/2)
+        text_with_border(self.caption + ": " + str(self.value), (0,0,0), (100,255,255), self.bar.x+self.bar._width/2, self.bar.y + self.bar._height/2)
         
     def overEvent(self):
         return (self.bar.x <= mouseX <= self.bar.x + self.bar._width + self._width

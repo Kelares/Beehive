@@ -1,19 +1,21 @@
 from __future__ import division
+from text_stroke import text_with_border
 
 class Graph(object):
+    max_data = 1000
+    
     def __init__(self, x, y, _width, _height, rotation=0):
         self.x = x
         self.y = y
         self._width = _width
         self._height = _height
         self.rotation = rotation
-        self.max_data = 1000
         self.max_x = self._width
-        self.max_y = self._height
+        self.max_y = self._height/2
     
     def render(self, traces):
         pushMatrix()
-        fill(100,100,100,100)
+        fill(50, 50, 50, 50)
         translate(self.x, self.y)
         rotate(self.rotation)
         rect(0, 0, self._width, self._height)
@@ -33,13 +35,10 @@ class Graph(object):
         line(0, self._height+arrow_length, self._width/16, self._height+arrow_length/4) 
         line(0, self._height+arrow_length, -self._width/16, self._height+arrow_length/4) 
 
+        strokeWeight(4)
+
         for _color, label, trace in traces:
             prev = ()
-
-            if len(trace) >= self.max_data:
-                for i, data_point in enumerate(trace):
-                    if i % 2 == 0:
-                        del(trace[i])
             
             max_x = max(trace, key=first_ele)[0]
             if self.max_x < max_x:
@@ -50,8 +49,12 @@ class Graph(object):
                 self.max_y = max_y
             
             stroke(*_color)         
+            prev_x = 0
             if len(trace) > 1:
                 for i, data_point in enumerate(trace):
+                    if prev_x > data_point[0]:
+                        print(trace[i], trace[i-1], trace[i+1])
+                    prev_x = data_point[0]
                     trace[i] = (self._width * data_point[0] / self.max_x, self._height * (data_point[1] / self.max_y))
                     
                 for data_point in trace:
@@ -62,6 +65,8 @@ class Graph(object):
                         prev = data_point
 
         stroke(255)
+        strokeWeight(4)
+
         ticks_x = create_list_with_n_elements(self.max_x, 10)
         ticks_y = create_list_with_n_elements(self.max_y, 10)
         max_tick_y = max(ticks_y)
@@ -77,13 +82,18 @@ class Graph(object):
             text(str(int(tick_y)), 0, -axis_y_ticks[i])
             line(-self._width/30, -axis_y_ticks[i], self._width/30, -axis_y_ticks[i])
             
+        strokeWeight(16)
+
         for i, trace in enumerate(traces):
             _color, label, data = trace
-            fill(*_color)
-            textSize(20)
+            textSize(22)
             textAlign(LEFT, TOP)
-            text(label, -self._width+ self._width/50, -self._height + self._height*(i)/10 + self._height/50)#self._width, self._height - self._height/10)
+            text_with_border(label, (0,0,0), _color, -self._width+ self._width/50, -self._height + self._height*(i)/10 + self._height/50, thickness=1)#self._width, self._height - self._height/10)
+        textAlign(CENTER, BOTTOM)
+        text_with_border("TIME", (0,0,0), (255,255,255), -self._width/2, 0, thickness=2)#self._width, self._height - self._height/10)
+
         stroke(255)
+        strokeWeight(1)
 
         popMatrix()
  
