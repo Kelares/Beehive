@@ -10,7 +10,7 @@ class Graph(object):
         self._width = _width
         self._height = _height
         self.rotation = rotation
-        self.max_x = self._width
+        self.max_x = self._width/2
         self.max_y = self._height/2
     
     def render(self, traces):

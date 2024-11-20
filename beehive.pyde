@@ -22,7 +22,7 @@ def setup():
     global ticks, bees, flowers, setup_button, go_button, inp_number_of_bees, inp_number_of_flowers, pace_slider, hive, graph, n_bees_flowers
     global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button
     
-    size(1200, 1200)
+    size(800, 800)
     smooth()
     frameRate(144)
     stroke(255)
@@ -94,11 +94,11 @@ def draw():
             for bee in bees.values():
                 bee.render()
         
-        if len(n_bees_flowers) >= Graph.max_data:
-            print(len(n_bees_flowers))
-            for i, tick in enumerate(n_bees_flowers):
-                if i % 2 == 0:
-                    del(n_bees_flowers[tick])
+        # if len(n_bees_flowers) >= Graph.max_data:
+        #     print(len(n_bees_flowers))
+        #     for i, tick in enumerate(n_bees_flowers):
+        #         if i % 2 == 0:
+        #             del(n_bees_flowers[tick])
                     
         n_bees_flowers[int(ticks.value)] = {"n_bees" : len(bees.keys()), "n_flowers": len(flowers.keys())}
         n_bees = []

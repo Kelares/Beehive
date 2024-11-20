@@ -15,13 +15,13 @@ class Bee(object):
     pollen = 0
     flower = None
     observed = None
-    SERACH_DURATION = 750
-    DURATION_WAGGLE_DANCE = 100
+    SERACH_DURATION = 500
+    DURATION_WAGGLE_DANCE = 200
     counter_waggle_dance = 0
     spawn_flower_check = False
     lifetime = 0
-    max_lifespan = 1500
-    min_lifespan = 1000
+    max_lifespan = SERACH_DURATION * 60 / 2
+    min_lifespan = SERACH_DURATION * 30 / 2
     
     def __init__(self, x, y, angle, hive):
         self.x = x
