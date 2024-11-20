@@ -3,7 +3,7 @@ from text_stroke import text_with_border
 
 class Flower(object):
     regenerate_rate = 0.01
-    spawn_rate = 0.1
+    spawn_rate = 0.05
     alive = True
     max_pollen = 90000
     radius = 35
@@ -14,7 +14,7 @@ class Flower(object):
         self._color = [59, 104, 223, 100] #[173, 225, 251, 100]
         self.collision_threshold = self.radius*2
         self.pollen = pollen
-        self.max_per_bee = 13000
+        self.max_per_bee = 20000/5
         self.regen = 0
         self.number_of_leaves = 8
         

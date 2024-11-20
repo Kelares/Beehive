@@ -16,7 +16,7 @@ class Bee(object):
     flower = None
     observed = None
     SERACH_DURATION = 750
-    DURATION_WAGGLE_DANCE = 200
+    DURATION_WAGGLE_DANCE = 100
     counter_waggle_dance = 0
     spawn_flower_check = False
     lifetime = 0

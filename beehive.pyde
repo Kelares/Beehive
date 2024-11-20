@@ -20,7 +20,7 @@ def not_middle(direction):
 
 def setup():
     global ticks, bees, flowers, setup_button, go_button, inp_number_of_bees, inp_number_of_flowers, pace_slider, hive, graph, n_bees_flowers
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance
+    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button
     
     size(1200, 1200)
     smooth()
@@ -37,7 +37,10 @@ def setup():
     inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="150")
     inp_number_of_flowers = TextBox(0, inp_number_of_bees.y+inp_number_of_bees._height, width/5, 50, "number of flowers: ", value="35")
     
-    graph = Graph(width-30, height-30, width/2, height/4, PI)
+    no_render = False
+    no_render_button = Button(0,  inp_number_of_flowers.y+inp_number_of_flowers._height, width/5,50, "No render")
+
+    graph = Graph(width-width/30, height-height/30, width/2, height/4, PI)
 
     stats = 1
     number_of_bees = Counter(width, 0 + height/50 * stats, "Number of bees: {}", align=(RIGHT, TOP))
@@ -63,7 +66,7 @@ def setup():
     # bee_stats.append(regenerate_rate)
     # stats += 1
     
-    spawn_rate = Counter(width, 0 + height/50 * stats, "Chance for a plant to spawn {}%", align=(RIGHT, TOP), value=Flower.spawn_rate)
+    spawn_rate = Counter(width, 0 + height/50 * stats, "Chance for a plant to spawn {}%", align=(RIGHT, TOP), value=Flower.spawn_rate*100)
     bee_stats.append(spawn_rate)
     stats += 1
         
@@ -75,20 +78,21 @@ def setup():
     bee_stats.append(max_POLLEN)
     stats += 1
         
-    max_follow_dance = Counter(width, 0 + height/50 * stats, "Max follow chance {}%", align=(RIGHT, TOP), value=max_follow_chance)
+    max_follow_dance = Counter(width, 0 + height/50 * stats, "Max follow chance {}%", align=(RIGHT, TOP), value=max_follow_chance*100)
     bee_stats.append(max_follow_dance)
     stats += 1
     
 def draw():
     global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, graph, n_bees_flowers
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance
+    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button
     background(0)
 
     if _setup:
-        for flower in flowers.values():
-            flower.render()
-        for bee in bees.values():
-            bee.render()
+        if no_render == False:
+            for flower in flowers.values():
+                flower.render()
+            for bee in bees.values():
+                bee.render()
         
         if len(n_bees_flowers) >= Graph.max_data:
             print(len(n_bees_flowers))
@@ -119,6 +123,7 @@ def draw():
     go_button.render()
     inp_number_of_bees.render()
     inp_number_of_flowers.render()
+    no_render_button.render()
     for bee_stat in bee_stats:
         bee_stat.render()
 
@@ -163,7 +168,7 @@ def draw():
     delay(100 - pace_slider.value)
     
 def mouseClicked():
-    global setup_button, go_button, _setup, go, inp_number_of_bees, inp_number_of_flowers
+    global setup_button, go_button, _setup, go, inp_number_of_bees, inp_number_of_flowers, no_render, no_render_button
     if setup_button.overEvent():
         _setup = True
         setup_trigger()
@@ -184,7 +189,13 @@ def mouseClicked():
         inp_number_of_flowers.selected = True
     else:
         inp_number_of_flowers.selected = False
-        
+    
+    if no_render_button.overEvent():
+        if no_render:
+            no_render = False
+        else:
+            no_render = True
+    
 def keyPressed():
     global inp_number_of_bees, inp_number_of_flowers
 
