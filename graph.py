@@ -35,25 +35,21 @@ class Graph(object):
         line(0, self._height+arrow_length, self._width/16, self._height+arrow_length/4) 
         line(0, self._height+arrow_length, -self._width/16, self._height+arrow_length/4) 
 
-        strokeWeight(4)
+        strokeWeight(1)
 
         for _color, label, trace in traces:
-            prev = ()
-            
-            max_x = max(trace, key=first_ele)[0]
-            if self.max_x < max_x:
-                self.max_x = max_x
-            
-            max_y = max(trace, key=sec_ele)[1] + self._height/20
-            if self.max_y < max_y:
-                self.max_y = max_y
-            
-            stroke(*_color)         
-            prev_x = 0
             if len(trace) > 1:
+                prev = ()
+                max_x = max(trace, key=first_ele)[0]
+                if self.max_x < max_x:
+                    self.max_x = max_x
+                
+                max_y = max(trace, key=sec_ele)[1] + self._height/20
+                if self.max_y < max_y:
+                    self.max_y = max_y
+                stroke(*_color)         
+                prev_x = 0
                 for i, data_point in enumerate(trace):
-                    if prev_x > data_point[0]:
-                        print(trace[i], trace[i-1], trace[i+1])
                     prev_x = data_point[0]
                     trace[i] = (self._width * data_point[0] / self.max_x, self._height * (data_point[1] / self.max_y))
                     
@@ -63,7 +59,6 @@ class Graph(object):
                         prev = data_point
                     else:
                         prev = data_point
-
         stroke(255)
         strokeWeight(4)
 

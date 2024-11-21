@@ -2,7 +2,7 @@ from __future__ import division
 from text_stroke import text_with_border
 
 class TextBox(object):
-    def __init__(self, x, y, _width, _height, caption, value=0, box_color=color(187, 207, 141, 150), text_color=(100,255,255,255)):
+    def __init__(self, x, y, _width, _height, caption, value=0, box_color=(187, 207, 141, 150), text_color=(100,255,255,255)):
         self.x = x
         self.y = y
         self._width = _width
@@ -19,7 +19,7 @@ class TextBox(object):
     def render(self):
         pushMatrix()
         translate(self.x, self.y)
-        fill(self.box_color)
+        fill(*self.box_color)
         rect(0, 0, self._width, self._height)
 
             

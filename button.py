@@ -1,7 +1,7 @@
 from text_stroke import text_with_border
 
 class Button(object):
-    def __init__(self, x, y, _width, _height, caption, box_color=color(187, 207, 141, 150), text_color=(100,255,255,255)):
+    def __init__(self, x, y, _width, _height, caption, box_color=(187, 207, 141, 150), text_color=(100,255,255,255)):
         self.x = x
         self.y = y
         self._width = _width
@@ -13,7 +13,7 @@ class Button(object):
         
         
     def render(self):
-        fill(self.box_color)
+        fill(*self.box_color)
         rect(self.x, self.y, self._width, self._height)
         textSize(20)
         textAlign(CENTER, CENTER);

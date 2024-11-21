@@ -4,7 +4,7 @@ from Bee import Bee
 class Hive(object):
     spawn_threshold = 30000
 
-    def __init__(self, x, y, _width, _height, box_color=color(193, 154, 107, 200)):
+    def __init__(self, x, y, _width, _height, box_color=(193, 154, 107, 200)):
         self.x = x
         self.y = y
         self._width = _width
@@ -16,7 +16,7 @@ class Hive(object):
         self.radius = _width/2
         
     def render(self):
-        fill(self.box_color)
+        fill(*self.box_color)
         rect(self.x, self.y, self._width, self._height)
         self.pollen_counter.render()
 

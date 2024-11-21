@@ -16,12 +16,13 @@ class Bee(object):
     flower = None
     observed = None
     SERACH_DURATION = 500
-    DURATION_WAGGLE_DANCE = 200
+    DURATION_WAGGLE_DANCE = 50
     counter_waggle_dance = 0
     spawn_flower_check = False
     lifetime = 0
-    max_lifespan = SERACH_DURATION * 60 / 2
-    min_lifespan = SERACH_DURATION * 30 / 2
+    max_lifespan = SERACH_DURATION * 60 /5
+    min_lifespan = SERACH_DURATION * 30 /5
+    max_per_bee = 20000/5
     
     def __init__(self, x, y, angle, hive):
         self.x = x
@@ -34,6 +35,7 @@ class Bee(object):
         self.angle = uniform(0, 2*PI)
         self.hive = hive
         self.life_span = randint(self.min_lifespan, self.max_lifespan)
+        self.number_of_trips = 0
 
         
     def render(self):
@@ -82,10 +84,11 @@ class Bee(object):
             if self.flower and self.observed:
                 self.activity = Activity.DANCE
                 
-            elif uniform(0,1) <= 0.01:
+            elif uniform(0,1) <= 0.015:
                 # print("SEARCH")
                 self.searching = 1
                 self.activity = Activity.SEARCH
+
                 
         if self.activity == Activity.DANCE:
             self.counter_waggle_dance += 1
@@ -141,6 +144,7 @@ class Bee(object):
             self.hive.pollen += self.pollen
             self.pollen = 0
             self.activity = Activity.IDLE
+            self.number_of_trips += 1
 
     def head_to_flower(self):
             self.angle = atan2(self.y-self.flower.y, self.x-self.flower.x)
@@ -159,7 +163,7 @@ class Bee(object):
     def harvesting(self, flower):
         # print("HARVESTING")
         pollen_amount = 1000
-        if flower.pollen > 0 and self.pollen <= flower.max_per_bee:
+        if flower.pollen > 0 and self.pollen <= self.max_per_bee:
             if self.flower.pollen - pollen_amount <= 0:
                 pollen_amount = self.flower.pollen
             self.pollen += pollen_amount
@@ -172,7 +176,6 @@ class Bee(object):
                 self.activity = Activity.RETURNING
             else:
                 self.angle = uniform(0, TWO_PI)
-
                 self.activity = Activity.SEARCH
 
             
