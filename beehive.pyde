@@ -28,14 +28,14 @@ def setup():
     stroke(255)
     hive = Hive(width/2-20, height/2-20, 40, 40)
     traces = {"number_of_bees": [], "number_of_flowers": []}
-    max_follow_chance = 0.2
+    max_follow_chance = 0.3
     
     setup_button = Button(0, 0, width/10,50, "setup")
     go_button = Button(width/10, 0, width/10,50, "go")
     pace_slider = Slider(0, go_button.y+go_button._height, width/5, height/20, "pace")
     ticks = Counter(width/2, 0, "Ticks: {}")
-    inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="40")
-    inp_number_of_flowers = TextBox(0, inp_number_of_bees.y+inp_number_of_bees._height, width/5, 50, "number of flowers: ", value="35")
+    inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="100")
+    inp_number_of_flowers = TextBox(0, inp_number_of_bees.y+inp_number_of_bees._height, width/5, 50, "number of flowers: ", value="50")
     
     no_render = False
     no_render_button = Button(0,  inp_number_of_flowers.y+inp_number_of_flowers._height, width/5,50, "No render")
@@ -83,6 +83,11 @@ def setup():
     bee_stats.append(max_follow_dance)
     stats += 1
         
+    scout_chance = Counter(width, 0 + height/50 * stats, "Scout chance {}%", align=(RIGHT, TOP), value=Bee.scout_chance*100)
+    bee_stats.append(scout_chance)
+    stats += 1
+    
+
     average_trips = Counter(width, 0 + height/50 * stats, "average_trips {}", align=(RIGHT, TOP), value="0")
     
     
@@ -110,12 +115,13 @@ def draw():
                 cut = True
 
         if cut:
-            graph.max_data += graph.max_data/2
-                
-        graph.render(
-            [((255,255,0), "number of bees", [data_point for data_point in traces["number_of_bees"]]), 
-             ((10, 251, 0, 255), "number of flowers", [data_point for data_point in traces["number_of_flowers"]])
-        ])
+            graph.max_data += int(graph.max_data/2)
+        if no_render == False:
+
+            graph.render(
+                [((255,255,0), "number of bees", [data_point for data_point in traces["number_of_bees"]]), 
+                ((10, 251, 0, 255), "number of flowers", [data_point for data_point in traces["number_of_flowers"]])
+            ])
     
 
         number_of_bees.value = len(bees)
@@ -125,18 +131,19 @@ def draw():
         number_of_flowers.render()
         
     ticks.render()
-    hive.render()
-    pace_slider.render()
-    pace_slider.update()
-    setup_button.render()
-    go_button.render()
-    inp_number_of_bees.render()
-    inp_number_of_flowers.render()
+    if no_render == False:
+    
+        hive.render()
+        pace_slider.render()
+        pace_slider.update()
+        setup_button.render()
+        go_button.render()
+        inp_number_of_bees.render()
+        inp_number_of_flowers.render()
+        for bee_stat in bee_stats:
+            bee_stat.render()
+
     no_render_button.render()
-    for bee_stat in bee_stats:
-        bee_stat.render()
-
-
     if go:
         ticks.value += 1
         traces["number_of_bees"].append((ticks.value, len(bees)))
@@ -173,12 +180,6 @@ def draw():
                 flowers[flower_id].alive = False
                 del(flowers[flower_id])
                 
-        # avr = 0
-        # for bee in init_bees:
-        #     avr += bee.number_of_trips
-            
-        # average_trips.value = ((avr/len(init_bees))/(ticks.value))*500
-        # average_trips.render()
         
         hive.update()
         new_bees = hive.spawn_bee()
@@ -266,7 +267,7 @@ def setup_trigger():
     
     temp = {}
     for bee in bees:
-        bee.lifetime = randint(Bee.min_lifespan/10, Bee.min_lifespan)
+        # bee.lifetime = randint(Bee.min_lifespan/10, Bee.min_lifespan)
         temp[id(bee)] = bee
     bees = temp
     

@@ -3,7 +3,7 @@ from text_stroke import text_with_border
 
 class Flower(object):
     regenerate_rate = 0.01
-    spawn_rate = 0.04
+    spawn_rate = 0.045
     alive = True
     max_pollen = 90000
     radius = 35
