@@ -4,28 +4,45 @@ import json
 with open("data.json") as f:
     data = json.load(f)
     number_of_bees = data["traces"]["number_of_bees"]
-    x = [tick[0] for tick in number_of_bees]
-    y = [tick[1] for tick in number_of_bees]
+    bx = [tick[0] for tick in number_of_bees]
+    by = [tick[1] for tick in number_of_bees]
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
-            x=x, y=y,
+            x=bx, y=by,
             mode='lines',
-            name='number_of_bees',
+            name='Bees',
             line=dict(color='rgb(255,255,0)')
         )
     )
     
     number_of_flowers = data["traces"]["number_of_flowers"]
-    x = [tick[0] for tick in number_of_flowers]
-    y = [tick[1] for tick in number_of_flowers]
+    fx = [tick[0] for tick in number_of_flowers]
+    fy = [tick[1] for tick in number_of_flowers]
+    max_y = max(by) if max(by) > max(fy) else max(fy)
     fig.add_trace(
         go.Scatter(
-            x=x, y=y,
+            x=fx, y=fy,
             mode='lines',
-            name='number_of_flowers',
+            name='Flowers',
             line=dict(color="rgb(10, 251, 0)")
         )
+    )
+    fig.update_layout(
+        title=dict(
+            text="Plot Title"
+        ),
+        xaxis=dict(
+            title=dict(
+                text="Time"
+            )
+        ),
+        yaxis=dict(
+            title=dict(
+                text="Number of:"
+            )
+        ),
+        yaxis_range=[0,max_y]
     )
 
 fig.show()
