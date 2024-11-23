@@ -31,7 +31,7 @@ def setup():
     stroke(255)
     hive = Hive(width/2-20, height/2-20, 40, 40)
     traces = {"number_of_bees": [], "number_of_flowers": []}
-    max_follow_chance = 0.3
+    max_follow_chance = 0.1
     
     setup_button = Button(0, 0, width/10,50, "setup")
     go_button = Button(width/10, 0, width/10,50, "go")
@@ -204,7 +204,7 @@ def draw():
         _save = False
     save_button.render()
     
-    if ticks.value == 999:
+    if ticks.value == 29999:
         go = False
         _save = True        
         ticks.value += 1
@@ -275,7 +275,7 @@ def keyPressed():
                 inp_number_of_flowers.value = str(inp_number_of_flowers.value) + str(key)
                 
 def setup_trigger():
-    global bees, flowers, inp_number_of_bees, hive, ticks, inp_number_of_flowers, traces,init_bees
+    global bees, flowers, inp_number_of_bees, hive, ticks, inp_number_of_flowers, traces,init_bees, graph
     human_width = 20
     human_height = 20
     print(inp_number_of_bees.value)
@@ -314,6 +314,8 @@ def setup_trigger():
     ticks.value = 0
     hive.pollen_counter.value = 0
     traces = {"number_of_bees": [], "number_of_flowers": []}
+    graph.max_x = 150
+    graph.max_y = graph._height/2
     
 def repulsive_coords(hive):
     x = randint(0+Flower.radius*2, width-Flower.radius*2)

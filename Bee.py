@@ -20,10 +20,10 @@ class Bee(object):
     counter_waggle_dance = 0
     spawn_flower_check = False
     lifetime = 0
-    max_lifespan = int(SERACH_DURATION * 8)
-    min_lifespan = int(SERACH_DURATION * 4)
+    max_lifespan = 20000 #int(SERACH_DURATION * 8)
+    min_lifespan = 10000 #int(SERACH_DURATION * 4)
     max_per_bee = 15000/5
-    scout_chance = 0.005
+    scout_chance = 0.001
     
     max_step = 8
     min_step = 1

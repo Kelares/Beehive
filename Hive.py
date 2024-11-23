@@ -2,7 +2,7 @@ from counter import Counter
 from Bee import Bee
 
 class Hive(object):
-    spawn_threshold = 30000
+    spawn_threshold = 70000
 
     def __init__(self, x, y, _width, _height, box_color=(193, 154, 107, 200)):
         self.x = x
