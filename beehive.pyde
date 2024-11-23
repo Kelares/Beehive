@@ -8,9 +8,12 @@ from counter import Counter
 from textBox import TextBox
 from Hive import Hive
 from graph import Graph
+from Save import Save
 
 go = False
 _setup = False
+no_render = False
+_save = False
 
 def not_middle(direction):
     temp = direction/2
@@ -20,7 +23,7 @@ def not_middle(direction):
 
 def setup():
     global ticks, bees, flowers, setup_button, go_button, inp_number_of_bees, inp_number_of_flowers, pace_slider, hive, graph, traces
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button, average_trips
+    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render_button, average_trips, save_button
     
     size(1200, 1200)
     smooth()
@@ -34,11 +37,11 @@ def setup():
     go_button = Button(width/10, 0, width/10,50, "go")
     pace_slider = Slider(0, go_button.y+go_button._height, width/5, height/20, "pace")
     ticks = Counter(width/2, 0, "Ticks: {}")
-    inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="100")
+    inp_number_of_bees = TextBox(0, pace_slider.bar.y+pace_slider.bar._height, width/5, 50, "number of bees: ", value="150")
     inp_number_of_flowers = TextBox(0, inp_number_of_bees.y+inp_number_of_bees._height, width/5, 50, "number of flowers: ", value="50")
     
-    no_render = False
     no_render_button = Button(0,  inp_number_of_flowers.y+inp_number_of_flowers._height, width/5,50, "No render")
+    save_button = Save(0,  no_render_button.y+no_render_button._height, width/5,50)
 
     graph = Graph(width-width/30, height-height/30, width/2, height/4, PI)
 
@@ -93,8 +96,8 @@ def setup():
     
     
 def draw():
-    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, graph, traces, average_trips
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button, cuts, init_bees
+    global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, graph, traces, average_trips, save_button
+    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button, cuts, init_bees, _save
     background(0)
 
     if _setup:
@@ -187,10 +190,34 @@ def draw():
             for new_bee in new_bees:
                 bees[id(new_bee)] = new_bee
             
+    if _save:
+        data = []
+        print(data)
+        for stat in bee_stats:
+            print(stat)
+            data.append(stat.caption.format(str(stat.value)))
+        print(data)
+        print(traces)
+        data.append(str(traces))
+        print(data)
+        save_button.data(*data)
+        _save = False
+    save_button.render()
+    
+    if ticks.value == 999:
+        go = False
+        _save = True        
+        ticks.value += 1
+        
     delay(100 - pace_slider.value)
     
 def mouseClicked():
-    global setup_button, go_button, _setup, go, inp_number_of_bees, inp_number_of_flowers, no_render, no_render_button
+    global setup_button, go_button, _setup, go, inp_number_of_bees, inp_number_of_flowers, no_render, no_render_button, save_button, _save
+
+    if save_button.overEvent():
+        _save = True
+        print("OVER")
+
     if setup_button.overEvent():
         _setup = True
         setup_trigger()
