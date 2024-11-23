@@ -9,6 +9,7 @@ from textBox import TextBox
 from Hive import Hive
 from graph import Graph
 from Save import Save
+import json
 
 go = False
 _setup = False
@@ -23,7 +24,7 @@ def not_middle(direction):
 
 def setup():
     global ticks, bees, flowers, setup_button, go_button, inp_number_of_bees, inp_number_of_flowers, pace_slider, hive, graph, traces
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render_button, average_trips, save_button
+    global number_of_bees, number_of_flowers, bee_stats, no_render_button, average_trips, save_button
     
     size(1200, 1200)
     smooth()
@@ -31,7 +32,6 @@ def setup():
     stroke(255)
     hive = Hive(width/2-20, height/2-20, 40, 40)
     traces = {"number_of_bees": [], "number_of_flowers": []}
-    max_follow_chance = 0.1
     
     setup_button = Button(0, 0, width/10,50, "setup")
     go_button = Button(width/10, 0, width/10,50, "go")
@@ -82,7 +82,7 @@ def setup():
     bee_stats.append(max_POLLEN)
     stats += 1
         
-    max_follow_dance = Counter(width, 0 + height/50 * stats, "Max follow chance {}%", align=(RIGHT, TOP), value=max_follow_chance*100)
+    max_follow_dance = Counter(width, 0 + height/50 * stats, "Max follow chance {}%", align=(RIGHT, TOP), value=Bee.max_follow_chance*100)
     bee_stats.append(max_follow_dance)
     stats += 1
         
@@ -97,7 +97,7 @@ def setup():
     
 def draw():
     global ticks, bees, flowers, _setup, go, setup_button, go_button, pace_slider, hive, graph, traces, average_trips, save_button
-    global number_of_bees, number_of_flowers, bee_stats, max_follow_chance, no_render, no_render_button, cuts, init_bees, _save
+    global number_of_bees, number_of_flowers, bee_stats, no_render, no_render_button, cuts, init_bees, _save
     background(0)
 
     if _setup:
@@ -157,7 +157,7 @@ def draw():
             if bee.activity == Activity.IDLE: 
                 observed = {}
                 for sec_bee in bees.values():
-                    if bee != sec_bee and sec_bee.observed and uniform(0,1) <= max_follow_chance * sec_bee.observed/Flower.max_pollen:
+                    if bee != sec_bee and sec_bee.observed and uniform(0,1) <= Bee.max_follow_chance * sec_bee.observed/Flower.max_pollen:
                         observed[sec_bee.observed] = sec_bee.flower
 
                 obs_keys = observed.keys()
@@ -191,17 +191,19 @@ def draw():
                 bees[id(new_bee)] = new_bee
             
     if _save:
-        data = []
-        print(data)
+        data = {}
+        
         for stat in bee_stats:
-            print(stat)
-            data.append(stat.caption.format(str(stat.value)))
+            data["Initial parameters"] = [stat.caption.format(str(stat.value)) for stat in bee_stats]
+        
+        
+        data["traces"] = traces
         print(data)
-        print(traces)
-        data.append(str(traces))
-        print(data)
-        save_button.data(*data)
+        save_button.data(data)
         _save = False
+        go = False
+        
+        
     save_button.render()
     
     if ticks.value == 29999:
@@ -216,7 +218,6 @@ def mouseClicked():
 
     if save_button.overEvent():
         _save = True
-        print("OVER")
 
     if setup_button.overEvent():
         _setup = True

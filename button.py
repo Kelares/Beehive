@@ -10,15 +10,24 @@ class Button(object):
         self.selected = False
         self.box_color = box_color
         self.text_color = text_color
-        
+        self.selected_counter = 0
         
     def render(self):
-        fill(*self.box_color)
+        if self.selected:
+            r,g,b,a = self.box_color
+            fill(r,255,b,255)
+            self.selected_counter += 1
+            if self.selected_counter == 3:
+                self.selected = False
+                self.selected_counter = 0
+        else:
+            fill(*self.box_color)
         rect(self.x, self.y, self._width, self._height)
         textSize(20)
         textAlign(CENTER, CENTER);
         text_with_border(self.caption, (0,0,0), self.text_color, self.x+self._width/2, self.y+self._height/2)
         
     def overEvent(self):
-        return (self.x <= mouseX <= self.x + self._width and self.y <= mouseY <= self.y + self._height)
+        self.selected = (self.x <= mouseX <= self.x + self._width and self.y <= mouseY <= self.y + self._height)
+        return self.selected
     

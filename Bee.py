@@ -24,7 +24,7 @@ class Bee(object):
     min_lifespan = 10000 #int(SERACH_DURATION * 4)
     max_per_bee = 15000/5
     scout_chance = 0.001
-    
+    max_follow_chance = 0.1
     max_step = 8
     min_step = 1
     
