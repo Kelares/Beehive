@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 import json
 
-with open("data.json") as f:
+with open("../../data.json") as f:
     data = json.load(f)
     number_of_bees = data["traces"]["number_of_bees"]
     bx = [tick[0] for tick in number_of_bees]
